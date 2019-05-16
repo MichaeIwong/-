@@ -1,0 +1,3 @@
+#这个文件是显示忽略的文件
+node_modules
+package-lock.json
