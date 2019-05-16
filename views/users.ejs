@@ -53,6 +53,7 @@
             </tr>
           </thead>
           <tbody id="tbody">
+            <!-- 服务器渲染模板 -->
             <% for(var i = 0; i < result.length; i ++) { %>
             <tr>
               <td class="text-center"><input type="checkbox"></td>
@@ -117,6 +118,7 @@
         }
       }
     })
+    //清除文本框内容
     $('input').val('')
   })
 
