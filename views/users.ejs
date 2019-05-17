@@ -38,39 +38,43 @@
       <div class="col-md-8">
         <div class="page-action">
           <!-- show when multiple checked -->
-          <a class="btn btn-danger btn-sm" href="javascript:;" style="display: none">批量删除</a>
+          <a class="btn btn-danger btn-sm btn-delAll" href="javascript:;" style="display: none">批量删除</a>
         </div>
-        <table class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr>
-              <th class="text-center" width="40"><input type="checkbox"></th>
-              <th class="text-center" width="80">头像</th>
-              <th>邮箱</th>
-              <th>别名</th>
-              <th>昵称</th>
-              <th>状态</th>
-              <th class="text-center" width="100">操作</th>
-            </tr>
-          </thead>
-          <tbody id="tbody">
-            <!-- 服务器渲染模板 -->
-            <% for(var i = 0; i < result.length; i ++) { %>
-            <tr>
-              <td class="text-center"><input type="checkbox"></td>
-              <td class="text-center"><img class="avatar"
-                  src="<%= result[i].avatar?result[i].avatar:'/static/uploads/avatar.jpg' %>"></td>
-              <td><%= result[i].email %></td>
-              <td><%= result[i].slug %></td>
-              <td><%= result[i].nickname %></td>
-              <td>激活</td>
-              <td class="text-center">
-                <a href="post-add.php" class="btn btn-default btn-xs">编辑</a>
-                <a href="javascript:;" class="btn btn-danger btn-xs" id="<%= result[i].id %>">删除</a>
-              </td>
-            </tr>
-            <% } %>
-          </tbody>
-        </table>
+        <form id="tableForm">
+          <table class="table table-striped table-bordered table-hover">
+            <thead>
+              <tr>
+                <th class="text-center" width="40"><input type="checkbox" id="checkedAll"></th>
+                <th class="text-center" width="80">头像</th>
+                <th>邮箱</th>
+                <th>别名</th>
+                <th>昵称</th>
+                <th>状态</th>
+                <th class="text-center" width="100">操作</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <!-- 服务器渲染模板 -->
+              <% for(var i = 0; i < result.length; i ++) { %>
+              <tr>
+                <td class="text-center"><input type="checkbox" class="boxitem" name='id' value="<%= result[i].id %>"></td>
+                <td class="text-center"><img class="avatar"
+                    src="<%= result[i].avatar?result[i].avatar:'/static/uploads/avatar.jpg' %>"></td>
+                <td><%= result[i].email %></td>
+                <td><%= result[i].slug %></td>
+                <td><%= result[i].nickname %></td>
+                <td>激活</td>
+                <td class="text-center">
+                  <a href="#" class="btn btn-default btn-xs" id="<%= result[i].id %>">编辑</a>
+                  <a href="javascript:;" class="btn btn-danger btn-xs" id="<%= result[i].id %>">删除</a>
+                </td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+
+        </form>
+
       </div>
     </div>
   </div>
@@ -81,25 +85,72 @@
 <script id="tmp" type="text/html">
       {{each data}}
       <tr>
-          <td class="text-center"><input type="checkbox"></td>
+          <td class="text-center"><input type="checkbox" class="boxitem" name="id" value="{{ $value.id }}"></td>
           <td class="text-center"><img class="avatar" src="{{$value.avatar?$value.avatar:'/static/uploads/avatar.jpg'}}"></td>
           <td>{{$value.email}}</td>
           <td>{{$value.slug}}</td>
           <td>{{$value.nickname}}</td>
           <td>激活</td>
           <td class="text-center">
-            <a href="post-add.php" class="btn btn-default btn-xs">编辑</a>
+            <a href="#" class="btn btn-default btn-xs" id="{{$value.id}}">编辑</a>
             <a href="javascript:;" class="btn btn-danger btn-xs" id="{{$value.id}}">删除</a>
           </td>
         </tr>
       {{/each}}
     </script>
 
+<!-- 编辑渲染模板 -->
+<script id="edit" type="text/html">
+
+  <h2>修改信息</h2>
+  <div class="form-group">
+    <!-- 添加隐藏项存储id -->
+    <input type="hidden" name="id" value="{{ id }}"> 
+    <label for="email">邮箱</label>
+    <input id="email" class="form-control" name="email" type="email" placeholder="邮箱" value="{{ email }}">
+  </div>
+  <div class="form-group">
+    <label for="nickname">昵称</label>
+    <input id="nickname" class="form-control" name="nickname" type="text" placeholder="昵称"  value="{{ nickname }}">
+  </div>
+  <div class="form-group">
+    <label for="password">密码</label>
+    <input id="password" class="form-control" name="password" type="password" placeholder="密码"  value="{{ password }}">
+  </div>
+  <div class="form-group">
+    <button class="btn btn-primary" id="update">修改</button>
+  </div>
+</script>
+
+<!-- 重新加载用户登录界面 -->
+<script id="addUser" type="text/html">
+    <h2>添加新用户</h2>
+    <div class="form-group">
+      <label for="email">邮箱</label>
+      <input id="email" class="form-control" name="email" type="email" placeholder="邮箱">
+    </div>
+    <div class="form-group">
+      <label for="slug">别名</label>
+      <input id="slug" class="form-control" name="slug" type="text" placeholder="slug">
+      <p class="help-block">https://zce.me/author/<strong>slug</strong></p>
+    </div>
+    <div class="form-group">
+      <label for="nickname">昵称</label>
+      <input id="nickname" class="form-control" name="nickname" type="text" placeholder="昵称">
+    </div>
+    <div class="form-group">
+      <label for="password">密码</label>
+      <input id="password" class="form-control" name="password" type="password" placeholder="密码">
+    </div>
+    <div class="form-group">
+      <button class="btn btn-primary" type="submit">添加</button>
+    </div>
+</script>
 <script>
   //点击提交数据
   $('#form').on('click', 'button[type="submit"]', function (e) {
     e.preventDefault()
-    
+
     let params = $('#form').serialize()
     // console.log(data);
     $.ajax({
@@ -128,8 +179,6 @@
       method: 'GET',
       url: '/getAllUser',
       success: res => {
-        console.log(res);
-
         let { status } = res
         if (status == 200) {
           let html = template('tmp', res)
@@ -159,4 +208,102 @@
     }
 
   })
+
+  //给编辑按钮绑定一个点击事件
+  $('#tbody').on('click', '.btn-default', function (e) {
+    e.preventDefault()
+    let id = $(this).attr('id')
+    $.ajax({
+      method: 'GET',
+      url: '/getEdit',
+      data: 'id=' + id,
+      success: res => {
+        // console.log(res);
+        let { status, data } = res
+        if (status === 200) {
+          let html = template('edit', data)
+          $('#form').html(html)
+        }
+
+      }
+    })
+
+
+  })
+
+  //给修改按钮一个点击事件
+  $('#form').on('click', '#update', function (e) {
+    e.preventDefault()
+    let params = $('#form').serialize()
+    // console.log(params);
+    $.ajax({
+      method: 'POST',
+      url: '/updateUser',
+      data: params,
+      success: res => {
+        let { status, msg } = res
+        if (status === 200) {
+          alert(msg)
+          //重新渲染用户信息
+          getAllUser()
+          //重新渲染新用户页面
+          let html = template('addUser', {})
+          $('#form').html(html)
+        } else {
+          alert('出错了')
+        }
+
+      }
+    })
+  })
+
+  //给全选框绑定一个事件
+  $('#checkedAll').on('click', function () {
+    let checked = $(this).prop('checked')
+    $('.boxitem').prop('checked', checked)
+    $(this).prop('checked') ? $('.btn-delAll').show() : $('.btn-delAll').hide()
+  })
+
+  //给多选框一个委托事件
+  $('#tbody').on('click', '.boxitem', function () {
+    let selCount = 0
+    $('.boxitem').each((index, ele) => {
+      let result = $(ele).prop('checked')
+      // console.log(result);
+      if (result) {
+        selCount++
+      }
+      // console.log(selCount);
+      selCount >= 2 ? $('.btn-delAll').show() : $('.btn-delAll').hide()
+      //复选框的数量
+      let totalCount = $('.boxitem').length
+      //全选时,上方复选框checked为true
+      selCount === totalCount ? $('#checkedAll').prop('checked', true) : $('#checkedAll').prop('checked', false)
+
+    })
+  })
+
+  //绑定批量提交内容的事件
+  $('.btn-delAll').click(function () { 
+    let params = $('#tableForm').serialize()
+    // console.log(params);
+    $.ajax({
+      method:'POST',
+      url:'/delUsersByIds',
+      data:params,
+      success:res=>{
+        // console.log(res);
+        let {status,msg} = res
+        if(status === 200) {
+          alert(msg)
+          getAllUser()
+        }else {
+          alert('出错了')
+        }
+        
+      }
+    })
+    
+   })
+
 </script>

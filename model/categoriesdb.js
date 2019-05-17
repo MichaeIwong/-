@@ -14,11 +14,11 @@ module.exports.query = (sql,callback)=>{
     //执行命令
     connection.query(sql,(err,result)=>{
         if (err) {
-            return console.log(err);      
+            return callback(err,null)
+            
         }
-        callback(result)
+        callback(null,result)
     })
     //关闭连接
     connection.end()
 }
-

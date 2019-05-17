@@ -3,6 +3,7 @@ const express = require('express')
 const ejs = require('ejs')
 const bodyParser = require('body-parser')
 const userRouter = require('./router/userRouter.js')
+const categoriesRouter = require('./router/categoriesRouter.js')
 
 //创建服务器对象
 const app = express()
@@ -21,6 +22,7 @@ app.use(bodyParser.json())
 
 //引入路由
 app.use(userRouter)
+app.use(categoriesRouter)
 
 //加载静态资源
 app.use('/assets',express.static('./assets'))
