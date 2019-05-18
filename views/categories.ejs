@@ -247,7 +247,7 @@
     })
     // console.log(setCount);
     setCount >= 2 ? $('#delAll').slideDown() : $('#delAll').slideUp()
-
+    setCount == totalCount? $('#checkedAll').prop('checked',true):$('#checkedAll').prop('checked',false)
   })
 
   //给批量删除绑定点击事件
