@@ -2,9 +2,11 @@
 const express = require('express')
 const ejs = require('ejs')
 const bodyParser = require('body-parser')
+const cookieSession = require('cookie-session')
 const userRouter = require('./router/userRouter.js')
 const categoriesRouter = require('./router/categoriesRouter.js')
 const slidesRouter = require('./router/slidesRouter.js')
+const loginRouter = require('./router/loginRouter.js')
 
 //创建服务器对象
 const app = express()
@@ -21,10 +23,19 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
+//注册
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2']
+}))
+
 //引入路由
+app.use(loginRouter)
 app.use(userRouter)
 app.use(categoriesRouter)
 app.use(slidesRouter)
+
 
 //加载静态资源
 app.use('/assets',express.static('./assets'))

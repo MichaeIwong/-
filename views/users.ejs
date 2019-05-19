@@ -164,6 +164,10 @@
         if (status == 200) {
           alert(msg)
           getAllUser()
+        }else if (status == 304) {
+          alert(msg)
+          window.location='/login'
+
         } else {
           alert('出错了')
         }
@@ -200,7 +204,11 @@
           if (status == 200) {
             alert(msg)
             getAllUser()
-          } else {
+          }else if (status == 304) {
+            alert(msg)
+          window.location='/login'
+
+        } else {
             alert('出错了')
           }
         }
@@ -223,6 +231,10 @@
         if (status === 200) {
           let html = template('edit', data)
           $('#form').html(html)
+        }else if (status == 304) {
+          alert(msg)
+          window.location='/login'
+
         }
 
       }
@@ -249,6 +261,10 @@
           //重新渲染新用户页面
           let html = template('addUser', {})
           $('#form').html(html)
+        }else if (status == 304) {
+          alert(msg)
+          window.location='/login'
+
         } else {
           alert('出错了')
         }
@@ -300,6 +316,10 @@
           getAllUser()
           //隐藏批量
           $('.btn-delAll').hide()
+        }else if (status == 304) {
+          alert(msg)
+          window.location='/login'
+
         }else {
           alert('出错了')
         }

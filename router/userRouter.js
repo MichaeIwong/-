@@ -2,6 +2,16 @@ const express = require('express')
 const userContr = require('../controller/userContr.js')
 const router = express.Router()
 
+//统一验证
+
+// router.use((req, res, next) => {
+//     // 验证是否登录
+//     if (req.session.user) {
+//         next()
+//     } else {
+//         res.send('<script>alert("您还没有登录");window.location="/login"</script>')
+//     }
+// })
 
 router.get('/users',userContr.getUser)//设置路由
         .post('/postUser',userContr.postUser)//处理提交信息
