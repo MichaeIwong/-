@@ -296,7 +296,10 @@
         let {status,msg} = res
         if(status === 200) {
           alert(msg)
+          //重修渲染
           getAllUser()
+          //隐藏批量
+          $('.btn-delAll').hide()
         }else {
           alert('出错了')
         }

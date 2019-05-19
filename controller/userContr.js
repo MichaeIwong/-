@@ -5,7 +5,13 @@ const url = require('url')
 module.exports = {
     //处理登录页面
     getUser : (req,res)=>{
-        userdb.query(`SELECT*FROM users`,result=>{
+        userdb.query(`SELECT*FROM users`,(err,result)=>{
+            if (err) {
+                return res.send({
+                    status:400,
+                    msg:'出错了'
+                })
+            }
             res.render('users',{result:result})
         })
     },
@@ -15,7 +21,13 @@ module.exports = {
  
         let data = req.body 
         let sql = `INSERT INTO users (email,slug, nickname, password, status) VALUES ('${data.email}','${data.slug}','${data.nickname}','${data.password}','activated')`
-        userdb.query(sql,result=>{
+        userdb.query(sql,(err,result)=>{
+            if (err) {
+                return res.send({
+                    status:400,
+                    msg:'出错了'
+                })
+            }
             res.send({
                 status:200,
                 msg:'新增成功'
@@ -25,10 +37,16 @@ module.exports = {
     //处理数据加载
     getAllUser:(req,res)=>{
         let userSql = `SELECT*FROM users`
-        userdb.query(userSql,result=>{
+        userdb.query(userSql,(err,result)=>{
+            if (err) {
+                return res.send({
+                    status:400,
+                    msg:'出错了'
+                })
+            }
             res.send({
                 status:200,
-                data:result
+                msg:'加载成功'
             })
         })
     },
@@ -36,7 +54,13 @@ module.exports = {
     getDel:(req,res)=>{
         let id = req.query.id
         let delSql = `DELETE FROM users WHERE id=${id}`
-        userdb.query(delSql,result=>{
+        userdb.query(delSql,(err,result)=>{
+            if (err) {
+                return res.send({
+                    status:400,
+                    msg:'出错了'
+                })
+            }
             res.send({
                 status:200,
                 msg:'删除成功'
@@ -47,10 +71,17 @@ module.exports = {
     getEdit:(req,res)=>{
         let id = req.query.id
         let selSql = `SELECT*FROM users WHERE id = ${id}`
-        userdb.query(selSql,result=>{
+        userdb.query(selSql,(err,result)=>{
+            if (err) {
+                return res.send({
+                    status:400,
+                    msg:'出错了'
+                })
+            }
             res.send({
                 status:200,
-                data:result[0]
+                msg:'加载成功',
+                data:result
             })
         })
         
@@ -59,15 +90,18 @@ module.exports = {
     //处理提交的修改信息
     updateUser:(req,res)=>{
         let params  = req.body
-        // console.log(params);
-   
-        
+
         let upSql = `UPDATE users SET email='${params.email}', nickname='${params.nickname}', password='${params.password}' WHERE id=${params.id}`
-        userdb.query(upSql,result=>{
-           
+        userdb.query(upSql,(err,result)=>{
+            if (err) {
+                return res.send({
+                    status:400,
+                    msg:'出错了'
+                })
+            }
             res.send({
                 status:200,
-                msg:'修改成功'
+                msg:'处理成功'
             })
         })
     },
@@ -79,7 +113,13 @@ module.exports = {
         let idStr = ids.id.join(',')
         // console.log(idStr);
         let delSql = `DELETE FROM users WHERE id in (${idStr})`
-        userdb.query(delSql,result=>{
+        userdb.query(upSql,(err,result)=>{
+            if (err) {
+                return res.send({
+                    status:400,
+                    msg:'出错了'
+                })
+            }
             res.send({
                 status:200,
                 msg:'删除成功'

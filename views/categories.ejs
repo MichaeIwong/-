@@ -131,6 +131,8 @@
   $('#form').on('click', 'button[type=submit]', function (e) {
     e.preventDefault()
     let params = $('#form').serialize()
+    $('#form')[0].reset()
+    
     $.ajax({
       method: 'POST',
       url: '/addSort',
@@ -148,7 +150,7 @@
 
       }
     })
-    $('input').val('')
+    
   })
 
   //给编辑按钮一个点击事件
@@ -229,7 +231,7 @@
   $('#checkedAll').click(function () {
     let result = $('#checkedAll').prop('checked')
     //判断全选框是否选中,下方选项状态一致
-    result ? $('.boxitem').prop('checked', true) : $('.boxitem').prop('checked', false)
+    $('.boxitem').prop('checked', result) 
     //批量删除显示
     result ? $('#delAll').slideDown() : $('#delAll').slideUp()
   })
@@ -241,9 +243,7 @@
     //检测点击选项的数量
     let setCount = 0
     $('.boxitem').each((index, ele) => {
-      if ($(ele).prop('checked')) {
-        setCount++
-      }
+      $(ele).prop('checked')? setCount++ : setCount
     })
     // console.log(setCount);
     setCount >= 2 ? $('#delAll').slideDown() : $('#delAll').slideUp()
@@ -264,6 +264,8 @@
             alert(msg)
             //重新渲染
             loadData()
+            //隐藏批量按钮
+            $('#delAll').hide()
           } else {
             alert(msg)
           }
@@ -271,6 +273,5 @@
         }
       })
     }
-
   })
 </script>
