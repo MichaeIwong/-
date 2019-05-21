@@ -4,7 +4,8 @@ const url = require('url')
 module.exports = {
     //处理静态页面
     categories: (req, res) => {
-        res.render('categories', {})
+        let nickname = req.session.user.nickname
+        res.render('categories', {nickname})
     },
 
     //渲染动态数据资源

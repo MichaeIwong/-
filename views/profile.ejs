@@ -1,0 +1,112 @@
+<% include layout/header%>
+ 
+  <div class="main">
+    <% include layout/nav%>
+    <div class="container-fluid">
+      <div class="page-title">
+        <h1>我的个人资料</h1>
+      </div>
+      <!-- 有错误信息时展示 -->
+      <!-- <div class="alert alert-danger">
+        <strong>错误！</strong>发生XXX错误
+      </div> -->
+      <form class="form-horizontal">
+        <input type="hidden" id="id" value="<%= id %>">
+        <div class="form-group">
+          <label class="col-sm-3 control-label">头像</label>
+          <div class="col-sm-6">
+            <label class="form-image">
+              <input id="avatar" type="file">
+              <img src="<%= avatar%>" id="img">
+              <i class="mask fa fa-upload"></i>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email" class="col-sm-3 control-label">邮箱</label>
+          <div class="col-sm-6">
+            <input id="email" class="form-control" name="email" type="type" value="<%= email%>" placeholder="邮箱" readonly>
+            <p class="help-block">登录邮箱不允许修改</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="slug" class="col-sm-3 control-label">别名</label>
+          <div class="col-sm-6">
+            <input id="slug" class="form-control" name="slug" type="type" value="<%= slug%>" placeholder="slug">
+            <p class="help-block">https://zce.me/author/<strong>zce</strong></p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="nickname" class="col-sm-3 control-label">昵称</label>
+          <div class="col-sm-6">
+            <input id="nickname" class="form-control" name="nickname" type="type" value="<%= nickname%>" placeholder="昵称">
+            <p class="help-block">限制在 2-16 个字符</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="bio" class="col-sm-3 control-label">简介</label>
+          <div class="col-sm-6">
+            <textarea id="bio" class="form-control" placeholder="Bio" cols="30" rows="6"><%= bio%></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-6">
+            <button type="submit" class="btn btn-primary" id="update">更新</button>
+            <a class="btn btn-link" href="password-reset.html">修改密码</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+ <% include layout/aside%>
+  <% include layout/footer%>
+
+  <script>
+    //头像预浏览
+    $('#avatar').on('change',function(){
+      //获取图片的虚拟路径
+      let imgUrl=URL.createObjectURL($('#avatar')[0].files[0])
+      $('#img').attr('src',imgUrl)
+
+    })
+    //绑定更新点击事件
+    $('#update').click(function(e){
+      e.preventDefault()
+      var fd = new FormData()
+      if ($('#avatar')[0].files[0]){
+        fd.append('img',$('#avatar')[0].files[0])
+      }else{
+        fd.append('img',$('#img').attr('src'))
+      }
+      //创建参数对象
+      fd.append('id',$('#id').val())
+      fd.append('email',$('#email').val())
+      fd.append('slug',$('#slug').val())
+      fd.append('nickname',$('#nickname').val())
+      fd.append('bio',$('#bio').val())
+      
+      // console.log(fd);
+
+      //发送参数到服务器
+      $.ajax({
+        method:'POST',
+        url:'/postData',
+        data:fd,
+        processData:false,
+        contentType:false,
+        success:res=>{
+          if(res.status ==200) {
+            alert(res.msg)
+            window.location='/users'
+          }else {
+            alert(res.msg)
+          }
+          
+        }
+      })
+      
+    })
+
+
+  </script>

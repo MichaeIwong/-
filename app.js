@@ -7,6 +7,7 @@ const userRouter = require('./router/userRouter.js')
 const categoriesRouter = require('./router/categoriesRouter.js')
 const slidesRouter = require('./router/slidesRouter.js')
 const loginRouter = require('./router/loginRouter.js')
+const aulterRouter = require('./router/aulterRouter.js')
 
 //创建服务器对象
 const app = express()
@@ -30,16 +31,16 @@ app.use(cookieSession({
   keys: ['key1', 'key2']
 }))
 
+//加载静态资源
+app.use('/assets',express.static('./assets'))
+app.use('/static/uploads',express.static('./uploads'))
 //引入路由
 app.use(loginRouter)
 app.use(userRouter)
 app.use(categoriesRouter)
 app.use(slidesRouter)
+app.use(aulterRouter)
 
-
-//加载静态资源
-app.use('/assets',express.static('./assets'))
-app.use('/static/uploads',express.static('./uploads'))
 
 //开启服务器
 app.listen(3000,()=>{

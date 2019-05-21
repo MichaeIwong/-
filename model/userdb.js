@@ -32,5 +32,17 @@ module.exports = {
     //         callback(err,result)
     //     })
     // }
-
+    profile:(id,callback)=>{
+        let selSql = `SELECT * FROM users WHERE id =${id}`
+        db.query(selSql,(err,result)=>{
+            callback(err,result)
+        })
+    },
+    updataSql:(obj,callback)=>{
+  
+        let upSql = `UPDATE users SET slug = '${obj.slug}', nickname = '${obj.nickname}', avatar = '${obj.img}', bio = '${obj.bio}' WHERE id = ${obj.id}`
+        db.query(upSql,(err,result)=>{
+            callback(err,result)
+        })
+    }
 }

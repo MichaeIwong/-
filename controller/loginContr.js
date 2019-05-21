@@ -32,7 +32,10 @@ module.exports={
             //存储session值
             req.session.user={
                 email:params.email,
-                password:params.pwd
+                password:params.pwd,
+                nickname:result[0].nickname,
+                id:result[0].id,
+                avatar:result[0].avatar
             }
             res.send({
                 status:200,
@@ -41,5 +44,14 @@ module.exports={
             
         })
         
+    },
+    //退出事件回到login页面
+    logout:(req,res)=>{
+        //清除cookie
+        req.session.user = null
+        res.send({
+            status:200,
+            msg:'退出成功'
+        })
     }
 }

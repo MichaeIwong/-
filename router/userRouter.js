@@ -20,6 +20,8 @@ router.get('/users',userContr.getUser)//设置路由
         .get('/getEdit',userContr.getEdit)//编辑内容处理路由
         .post('/updateUser',userContr.updateUser)//处理提交修改信息
         .post('/delUsersByIds',userContr.delUsersByIds)//根据选中id批量删除
+        .get('/profile',userContr.profile)//加载个人中心页面
+        .post('/postData',userContr.postData)//提交处理个人中心数据
 
 //暴露接口
 module.exports = router
