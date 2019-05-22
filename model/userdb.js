@@ -44,5 +44,19 @@ module.exports = {
         db.query(upSql,(err,result)=>{
             callback(err,result)
         })
+    },
+    insertReset: (password,id, callback) => {
+        let inserSql = `UPDATE users SET password = ${password} WHERE id = ${id}`
+        //执行语句0
+        db.query(inserSql, (err, result) =>{
+            callback(err,result)
+        })
+    },
+    selReset:(id,callback)=>{
+        let selSql = `SELECT password FROM users WHERE id =${id}`
+        //执行语句
+        db.query(selSql,(err,result)=>{
+            callback(err,result)
+        })
     }
 }

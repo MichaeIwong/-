@@ -7,7 +7,8 @@ module.exports.query = (sql,callback)=>{
         host:'localhost',
         user:'root',
         password:'root',
-        database:'alibaixiu'
+        database:'alibaixiu',
+        multipleStatements: true // 允许 mysql 执行多条 sql 语句
     })
     //开启连接
     connection.connect()

@@ -22,6 +22,8 @@ router.get('/users',userContr.getUser)//设置路由
         .post('/delUsersByIds',userContr.delUsersByIds)//根据选中id批量删除
         .get('/profile',userContr.profile)//加载个人中心页面
         .post('/postData',userContr.postData)//提交处理个人中心数据
+        .get('/password-reset',userContr.getPassword)//加载修改密码页面
+        .post('/postReset',userContr.postReset)//处理修改密码数据
 
 //暴露接口
 module.exports = router

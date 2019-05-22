@@ -213,6 +213,46 @@ module.exports = {
             })
             
         })
+    },
+    //加载修改密码页面
+    getPassword:(req,res)=>{
+        let nickname = req.session.user.nickname
+        let avatar = req.session.user.avatar
+        let id = req.session.user.id
+        let password = req.session.user.password
+        res.render('password-reset',{nickname,avatar,id,password})
+    },
+    //处理修改密码数据
+    postReset:(req,res)=>{
+        let params=req.body
+        // console.log(params);
+        let id = req.session.user.id
+        let password = params.newPwd
+       
+        userdb.selReset(id,(err,result)=>{
+            if (result[0].password == params.oldPwd) {
+                userdb.insertReset(password,id,(err1,result)=>{
+                    if (err1) {
+                        return res.send({
+                            status:400,
+                            msg:'出错了'
+                        })
+                    }
+                    //清空session
+                    req.session.user = null
+                    res.send({
+                        status:200,
+                        msg:'修改成功'
+                    })
+                })
+            }else {
+                return res.send({
+                    status:304,
+                    msg:'旧密码错误'
+                })
+            }
+        })
+
     }
 
 }

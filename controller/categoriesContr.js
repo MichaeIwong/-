@@ -5,7 +5,9 @@ module.exports = {
     //处理静态页面
     categories: (req, res) => {
         let nickname = req.session.user.nickname
-        res.render('categories', {nickname})
+        let avatar = req.session.user.avatar
+        
+        res.render('categories', {avatar,nickname})
     },
 
     //渲染动态数据资源
