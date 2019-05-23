@@ -15,7 +15,16 @@
       <!-- show when multiple checked -->
       <a class="btn btn-danger btn-sm" href="javascript:;" style="display: none">批量删除</a>
       <form class="form-inline">
+        <select name="" class="form-control input-sm" id="categories">
+          <option value="0">所有分类</option>
 
+        </select>
+        <select name="" class="form-control input-sm" id="status">
+          <option value="0">所有状态</option>
+          <option value="drafted">草稿</option>
+          <option value="published">已发布</option>
+        </select>
+        <button class="btn btn-default btn-sm" id="change">筛选</button>
       </form>
       <ul class="pagination pagination-sm pull-right" id="pagination">
 
@@ -55,26 +64,17 @@
       <td class="text-center">{{$value.created}}</td>
       <td class="text-center">{{$value.status == 'published'?'已发布':'草稿'}}</td>
       <td class="text-center">
-        <a href="javascript:;" class="btn btn-default btn-xs">编辑</a>
+        <a href="/post-edit?id={{$value.id}}" class="btn btn-default btn-xs">编辑</a>
         <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
       </td>
     </tr>
   {{/each}}
 </script>
 <!-- 分类渲染模板 -->
-<script id="category" type="text/html">
-  <select name="" class="form-control input-sm" id="categores">
-      <option value="">所有分类</option>
-      {{each data}}
-      <option value="{{$value.id}}">{{$value.name}}</option>
-      {{/each}}
-    </select>
-    <select name="" class="form-control input-sm" id="status">
-      <option value="">所有状态</option>
-      <option value="drafted">草稿</option>
-      <option value="published">已发布</option>
-    </select>
-    <button class="btn btn-default btn-sm" id="change">筛选</button>
+<script id="cate" type="text/html">
+  {{each data}}
+  <option value="{{$value.id}}">{{$value.name}}</option>
+  {{/each}}
 </script>
 <script>
 
@@ -82,14 +82,16 @@
   let pagesize = 10
   //动态渲染数据
   function getData(page, pagesize) {
+    let cate = $('#categories').val()
+    let status = $('#status').val()
     $.ajax({
       method: 'GET',
-      url: `/getPostsData?page=${page}&pagesize=${pagesize}`,
+      url: `/getPostsData?page=${page}&pagesize=${pagesize}&sta=${status}&cate=${cate}`,
       success: res => {
         // console.log(res);
         let { status, msg, data } = res
         if (status == 200) {
-          let html = template('tmp', res)
+          var html = template('tmp', res)
           $('#tbody').html(html)
           initPage(data[1][0]['count(*)'], pagesize)
         }
@@ -99,11 +101,15 @@
   }
   getData(1, pagesize)
 
+
+
   //初始化导航条
   function initPage(total, pagesize) {
+    // console.log(bulr);
+
     $('#pagination').twbsPagination({
       totalPages: Math.ceil(total / pagesize), // 总页数
-      visiblePages: 3, // 可见页数
+      visiblePages: 6, // 可见页数
       // startPage: 1, // 初始化页数
       hideOnlyOnePage: true, // 只有一页时隐藏
       first: '首页', // 第一页显示的文本
@@ -117,34 +123,31 @@
     });
   }
   //得到分类数据
-  $.ajax({
-    method: 'GET',
-    url: '/getAllData',
-    success: res => {
-      let html = template('category', res)
-      $('.form-inline').html(html)
-    }
+  function getCate() {
+    $.ajax({
+      method: 'GET',
+      url: '/getAllData',
+      success: res => {
+        let html = template('cate', res)
+        $('#categories').append(html)
+      }
 
-  })
+    })
+  }
+  getCate()
+
   //给筛选绑定一个点击事件
   $('.form-inline').on('click', '#change', function (e) {
     e.preventDefault()
-    let categoresId = $('#categores').val()
-    let status = $('#status').val()
-    let params = {
-      status:status,
-      categoresId:categoresId
-    }
-    $.ajax({
-      method: 'POST',
-      url: '/postChange',
-      data: params,
-      success: res => {
-        console.log(res);
-
-      }
-    })
-
+    // getCheck(pagesize)
+    //销毁初始化
+    $('#pagination').twbsPagination('destroy');
+    getData(1,pagesize)
   })
+
+  
+
+
+
 
 </script>

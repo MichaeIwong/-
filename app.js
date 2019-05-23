@@ -8,7 +8,7 @@ const categoriesRouter = require('./router/categoriesRouter.js')
 const slidesRouter = require('./router/slidesRouter.js')
 const loginRouter = require('./router/loginRouter.js')
 const aulterRouter = require('./router/aulterRouter.js')
-const postsRouter = require('./router/postsRouter.js')
+
 
 //创建服务器对象
 const app = express()
@@ -41,7 +41,7 @@ app.use(userRouter)
 app.use(categoriesRouter)
 app.use(slidesRouter)
 app.use(aulterRouter)
-app.use(postsRouter)
+
 
 //开启服务器
 app.listen(3000,()=>{
