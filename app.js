@@ -8,6 +8,7 @@ const categoriesRouter = require('./router/categoriesRouter.js')
 const slidesRouter = require('./router/slidesRouter.js')
 const loginRouter = require('./router/loginRouter.js')
 const aulterRouter = require('./router/aulterRouter.js')
+const setRouter = require('./router/setRouter.js')
 
 
 //创建服务器对象
@@ -35,13 +36,14 @@ app.use(cookieSession({
 //加载静态资源
 app.use('/assets',express.static('./assets'))
 app.use('/static/uploads',express.static('./uploads'))
+app.use('/public',express.static('./public'))
 //引入路由
-app.use(loginRouter)
-app.use(userRouter)
-app.use(categoriesRouter)
-app.use(slidesRouter)
-app.use(aulterRouter)
-
+app.use(loginRouter)//设置 登录 路由
+app.use(userRouter)//设置 用户 路由
+app.use(categoriesRouter)//设置 分类 路由
+app.use(slidesRouter)//设置 登录 路由
+app.use(aulterRouter)//设置 文章 路由
+app.use(setRouter)//设置 导航 路由
 
 //开启服务器
 app.listen(3000,()=>{
